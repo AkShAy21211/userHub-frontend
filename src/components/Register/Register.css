@@ -1,0 +1,17 @@
+.login-container {
+    width: 25rem;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    background-color: #d1c9c927;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-control::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+    /* Firefox */
+}
