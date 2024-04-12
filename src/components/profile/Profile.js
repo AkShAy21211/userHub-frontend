@@ -73,8 +73,8 @@ console.log(success);
             <div className="profile-img">
               {image || userData.image ? (
                 <img
-                  src={
-                    image || `https://mern-stack-userhub-api.onrender.com/images/${userData.image}`
+                  src={       
+                    image || `https://mern-stack-userhub-api.onrender.com/${userData.image}`
                   }
                   alt="Profile"
                 />
