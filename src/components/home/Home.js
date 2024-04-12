@@ -16,7 +16,7 @@ const Blog = ({  title, content, author,image }) => {
         <h2 >{title}</h2>
         <p>By: {author.name}</p>
         <p>{content}</p>
-        <img className="img-responsive" src={'http://localhost:3000/images/'+imageName} alt={title} />
+        <img className="img-responsive" src={'https://mern-stack-userhub-api.onrender.com/images/'+imageName} alt={title} />
       </div>
     </Col>
   );

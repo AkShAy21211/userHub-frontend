@@ -74,7 +74,7 @@ console.log(success);
               {image || userData.image ? (
                 <img
                   src={
-                    image || `http://localhost:3000/images/${userData.image}`
+                    image || `https://mern-stack-userhub-api.onrender.com/images/${userData.image}`
                   }
                   alt="Profile"
                 />
