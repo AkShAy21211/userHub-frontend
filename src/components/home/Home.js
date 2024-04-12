@@ -9,14 +9,13 @@ import { getPost } from "../../app/features/post/postSlice";
 
 const Blog = ({  title, content, author,image }) => {
 
-  const imageName = image.split('\\').pop();
   return (
     <Col lg={6} xl={6}>
       <div className="blog shadow  post-container d-flex flex-column p-4">
         <h2 >{title}</h2>
         <p>By: {author.name}</p>
         <p>{content}</p>
-        <img className="img-responsive" src={'https://mern-stack-userhub-api.onrender.com/'+imageName} alt={title} />
+        <img className="img-responsive" src={`http://localhost:3000/images/${image.split('\\').pop()}`} alt={title} />
       </div>
     </Col>
   );
