@@ -10,12 +10,16 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { useDispatch, useSelector } from "react-redux";
 import { authenticate } from "./app/features/user/userSlice";
-import ProfilePage from "./pages/ProfilePage"
+import ProfilePage from "./pages/ProfilePage";
+import Layout from "./components/layout/Layout";
+import Post from "./components/post/Post";
+
 const HomePage = lazy(() => import("./pages/HomePage"));
 
 const App = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state1) => state1.auth.user);
+  const user = useSelector((state) => state.auth.user);
+
   useEffect(() => {
     dispatch(authenticate());
   }, []);
@@ -26,10 +30,12 @@ const App = () => {
         <Route
           element={
             user ? (
-              <ErrorBoundary fallback={<h2>error occured</h2>}>
-                <Suspense fallback={<h2>Loading</h2>}>
-                  <HomePage />
-                </Suspense>
+              <ErrorBoundary fallback={<h2>Error occurred</h2>}>
+                <Layout>
+                  <Suspense fallback={<h2></h2>}>
+                    <HomePage />
+                  </Suspense>
+                </Layout>
               </ErrorBoundary>
             ) : (
               <Navigate to="/login" replace={true} />
@@ -49,11 +55,26 @@ const App = () => {
           }
           path="/register"
         />
-         <Route
+
+        <Route
           element={
-            user ? <ProfilePage /> : <Navigate to="/login" replace={true} />
+            user ?
+            <Layout>
+             <ProfilePage /> 
+            </Layout>
+             : <Navigate to="/login" replace={true} />
           }
           path="/profile"
+        />
+         <Route
+          element={
+            user ?
+            <Layout>
+             <Post /> 
+            </Layout>
+             : <Navigate to="/login" replace={true} />
+          }
+          path="/create"
         />
       </Routes>
     </Router>

@@ -1,0 +1,16 @@
+
+.blog-container{
+
+    padding: 53px;
+    
+}
+.blog{
+
+    color: black;
+}
+
+.post-container:hover{
+    scale: 1.02;
+    transition: ease-in-out 500ms;
+  
+}

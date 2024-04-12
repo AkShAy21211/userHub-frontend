@@ -58,6 +58,7 @@ function Login() {
 
     if (!error.emailError && !error.passwordError) {
       dispatch(login(formData));
+      console.log(formData);
       if (success) {
         setFormData({ email: "", password: "" });
 
@@ -71,7 +72,8 @@ function Login() {
   return (
     
     <Container
-      className="d-flex justify-content-center align-items-center"
+    fluid
+      className="d-flex justify-content-center align-items-center bg-black"
       style={{ minHeight: "100vh" }}
     >
       <Row className="login-container">

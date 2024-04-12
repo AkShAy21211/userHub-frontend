@@ -3,57 +3,91 @@ import { Container, Col, Row, Button, Form } from "react-bootstrap";
 import "./Profile.css";
 import Skeleton from "../skleton/Skleton";
 import { useDispatch, useSelector } from "react-redux";
-import { profile,updateProfile } from "../../app/features/user/userSlice";
+import { profile, updateProfile } from "../../app/features/user/profileSlice";
+import { getPost,deletePost } from "../../app/features/post/postSlice";
+import { CgTrash } from "react-icons/cg";
+import { Link } from "react-router-dom";
 
 function Profile() {
+  const posts = useSelector((state) => state.post.posts);
+  const success = useSelector((state) => state.post.success);
+console.log(success);
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth.user);
-  const fileInputRef = useRef(null);
-  const [user, setUser] = useState({
-    image:'',
-    name:"",
-    email:"",
-    phone:""
+  const deleteDispatch=  useDispatch()
+  const [image, setImage] = useState("");
+  const [userData, setUserData] = useState({
+    image: "",
+    name: "",
+    email: "",
+    phone: "",
   });
+  const fileInputRef = useRef(null);
+  const user = useSelector((state) => state.profile.user);
 
   useEffect(() => {
     dispatch(profile());
-    const {user} = userData;
-    setUser({...user,...user});
+    setUserData({ ...user });
+    console.log("use effct one", userData);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getPost());
   }, []);
 
-  console.log(user);
+  useEffect(() => {
+    if (user) {
+      const imageName = user.image ? user.image.split("\\").pop() : null;
+      setUserData({ ...user, image: imageName });
+      console.log("useeft two", userData);
+    }
+  }, [user]);
+
   const handleUploadClick = () => {
     fileInputRef.current.click();
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setUser({ ...user, image: URL.createObjectURL(file) });
+    setImage(URL.createObjectURL(file));
+    setUserData({ ...userData, image: file });
   };
- const handleSubmit = ()=>{
 
-  dispatch(updateProfile(user))
- }
+
+  const handleSubmit = () => {
+    const { name, email, phone, image } = userData;
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", name);
+    formDataToSend.append("email", email);
+    formDataToSend.append("phone", phone);
+    formDataToSend.append("image", image);
+    dispatch(updateProfile(formDataToSend));
+    setImage(null);
+    console.log(userData);
+  };
 
   return (
-    <Container fluid style={{ backgroundColor: "black", height: "100vh" }}>
-      <Row className="h-100  d-flex justify-content-center align-items-center">
-        <Col sm={12} md={5} lg={4} xl={3}>
-          <div className="profile-card">
+    <Container fluid style={{ backgroundColor: "white", height: "max-content",marginBottom:"20px" }}>
+      <Row className="h-100  d-flex justify-content-around align-items-center">
+        <Col sm={6} md={5} lg={4} xl={3}>
+          <div className="profile-card mt-5">
             <div className="profile-img">
-              {user.image ? (
-                <img src={user.image} alt="Profile" />
+              {image || userData.image ? (
+                <img
+                  src={
+                    image || `http://localhost:3000/images/${userData.image}`
+                  }
+                  alt="Profile"
+                />
               ) : (
                 <Skeleton height={150} width={150} circle={true} />
               )}
               <Button
                 variant="primary"
                 size="sm"
-                className="upload-button "
+                className="upload-button bg-white text-dark btn-outline-dark"
                 onClick={handleUploadClick}
               >
-                Upload Image
+                Update Image
               </Button>
             </div>
             <div className="profile-details">
@@ -61,37 +95,67 @@ function Profile() {
                 <Form.Label>Name:</Form.Label>
                 <Form.Control
                   type="text"
-                  defaultValue={user?user.name:""}
-                  onChange={(e) => setUser({ ...user, name: e.target.value })} // Add onChange handler
+                  value={userData.name}
+                  onChange={(e) =>
+                    setUserData({ ...userData, name: e.target.value })
+                  }
                 />
               </Form.Group>
               <Form.Group controlId="formEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
                   type="email"
-                  defaultValue={user?user.email:""}
-                    onChange={(e) => setUser({ ...user, email: e.target.value })} // Add onChange handler
-
+                  value={userData.email}
+                  onChange={(e) =>
+                    setUserData({ ...userData, email: e.target.value })
+                  }
                 />
               </Form.Group>
               <Form.Group controlId="formPhone">
                 <Form.Label>Phone:</Form.Label>
                 <Form.Control
                   type="text"
-                  defaultValue={user?user.phone:""}
-                 onChange={(e) => setUser({ ...user, phone: e.target.value })} // Add onChange handler
-
+                  value={userData.phone}
+                  onChange={(e) =>
+                    setUserData({ ...userData, phone: e.target.value })
+                  }
                 />
               </Form.Group>
-             <Button className="btn-block w-100 mt-3" onClick={handleSubmit}>Update profile</Button>
+              <Button
+                className="btn-block w-100 mt-3 btn-outline-dark bg-white"
+                onClick={handleSubmit}
+              >
+                Update profile
+              </Button>
             </div>
             <input
               type="file"
+              name="image"
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileChange}
             />
           </div>
+        </Col>
+        <Col sm={6} md={6} lg={7} xl={7}>
+       {posts ? (
+  <>
+    <h4 className="badge fs-6 mt-5 bg-dark">Your Blogs</h4>
+    {posts.map((post, index) => (
+      <div key={index} className="blog-card ">
+        <h6>{post.title}</h6>
+        <p>{post.content.slice(0, 100)}</p>
+        <CgTrash
+          className="text-danger"
+          onClick={() => deleteDispatch(deletePost(post._id))}
+        />
+      </div>
+      
+    ))}
+  </>
+) : (
+null)}
+
         </Col>
       </Row>
     </Container>

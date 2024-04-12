@@ -28,6 +28,26 @@ export const phoneValidator = (phone) => {
     return '';
 }
 
+export const postValidator = (title, content) => {
+  const errors = {};
+
+  // Validate title
+  if (!validator.isLength(title, { min: 5 })) {
+    errors.title = 'Title must be between 5 and 100 characters';
+  }
+
+  // Validate content
+  if (!validator.isLength(content, { min: 10 })) {
+    errors.content = 'Content must be at least 10 characters long';
+  }
+
+
+
+
+
+  return errors;
+};
+
 export const passwordValidator = (password) => {
     if (!validator.isLength(password, { min: 6 })) {
         return 'Password must be at least 6 characters long.';

@@ -73,7 +73,8 @@ function Register() {
 
   return (
     <Container
-      className="d-flex justify-content-center align-items-center"
+    fluid
+      className="d-flex bg-black justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}>
       <Row className="login-container">
         <Col lg={12} xl={12}>
